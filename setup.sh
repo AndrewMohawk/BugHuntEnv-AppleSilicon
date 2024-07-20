@@ -59,5 +59,15 @@ cd ..
 sudo make install
 
 # Install Python packages: lief and frida-tools
-pip3 install --break-system-packages --no-cache-dir lief
-pip3 install --break-system-packages --no-cache-dir frida-tools
+PFLAGS="--no-cache-dir"
+if $(lsb_release -rs | grep -E "^24" > /dev/null); then
+    PFLAGS="--break-system-packages $PFLAGS"
+fi
+pip3 install $PFLAGS lief
+pip3 install $PFLAGS frida-tools
+if ! command -v frida; then
+  cd ~/.local/bin
+  echo 'export PATH="$PATH:'$(pwd)'"' >> ~/.bashrc
+  echo "Run 'source ~/.bashrc' to add frida to PATH"
+fi
+
