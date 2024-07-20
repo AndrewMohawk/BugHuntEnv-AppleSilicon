@@ -6,7 +6,6 @@ sudo apt-get install -y \
     build-essential \
     binutils \
     vim \
-    emacs \
     clang \
     gdb \
     libcjson1 \
@@ -20,7 +19,6 @@ sudo apt-get install -y \
     python3 \
     python3-dev \
     python3-pip \
-    sudo \
     libglib2.0-dev \
     libpixman-1-dev \
     ninja-build \
@@ -36,7 +34,7 @@ if [ ! -f "/lib/x86_64-linux-gnu/libcrypto.so.1.1" ]; then
     cd openssl-1.1.1f/
     ./config
     make
-    ln -s /lib/x86_64-linux-gnu/libcrypto.so.1.1 ./libcrypto.so.1.1
+    sudo ln -s $(pwd)/libcrypto.so.1.1 /lib/x86_64-linux-gnu/libcrypto.so.1.1
 fi
 
 # Avoid make install since this is an old package.
@@ -61,5 +59,5 @@ cd ..
 sudo make install
 
 # Install Python packages: lief and frida-tools
-pip3 install --no-cache-dir lief
-pip3 install --no-cache-dir frida-tools
+pip3 install --break-system-packages --no-cache-dir lief
+pip3 install --break-system-packages --no-cache-dir frida-tools
