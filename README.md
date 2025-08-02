@@ -1,3 +1,6 @@
+# Disclaimer
+This repo has been built and only tested on _my_ M1 Max for this class. USE AT YOUR OWN RISK.
+
 # A Basic Guide to Bug Hunting with Ghidra
 
 This repo contains details on the environment needed to run some of the classroom examples.
