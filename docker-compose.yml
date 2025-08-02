@@ -3,10 +3,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        USER_ID: ${USER_ID:-1000}
+        GROUP_ID: ${GROUP_ID:-1000}
     platform: linux/amd64
     container_name: bughunt-environment
     ports:
-      - "8080:8080"
+      - "8081:8081"
     volumes:
       # Mount the current directory to /home/user/workspace for easy access to files
       - .:/home/user/workspace
@@ -14,6 +17,7 @@ services:
       - bughunt-data:/home/user/data
       # Mount a directory for sample binaries and firmware
       - ./samples:/home/user/samples
+      - ./USB25:/home/user/USB25
     working_dir: /home/user/workspace
     stdin_open: true
     tty: true
@@ -21,6 +25,9 @@ services:
       - TERM=xterm-256color
     command: bash
     restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
 
 volumes:
   bughunt-data:

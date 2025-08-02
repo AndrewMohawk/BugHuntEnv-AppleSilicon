@@ -26,7 +26,18 @@ RUN apt-get update && apt-get install -y \
     psmisc \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd -m user -G sudo
+# Accept build arguments for user ID and group ID
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+# Create group and user with specified IDs (handle existing groups gracefully)
+RUN if ! getent group ${GROUP_ID} >/dev/null 2>&1; then \
+        groupadd -g ${GROUP_ID} user; \
+    else \
+        groupadd user; \
+    fi && \
+    useradd -u ${USER_ID} -g user -m user -G sudo
+
 # Enable passwordless sudo for the 'user'
 RUN echo 'user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/user
 
